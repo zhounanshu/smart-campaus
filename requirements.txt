@@ -1,0 +1,9 @@
+Flask
+Flask-RESTful
+Flask-SQLAlchemy
+itsdangerous
+requests
+SQLAlchemy
+MySQL-python
+Flask-Bcrypt
+Flask-Script
