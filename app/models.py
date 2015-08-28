@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
+from flask.ext.sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
@@ -129,11 +128,12 @@ class SensorData(db.Model):
     datetime = db.Column(db.DateTime)
     status = db.Column(db.Integer)
 
-    def __init__(self, sensor_id, device_id, value, datetime):
+    def __init__(self, sensor_id, device_id, value, datetime, status):
         self.sensor_id = sensor_id
         self.device_id = device_id
         self.value = value
         self.datetime = datetime
+        self.status = status
 
 # Create the database tables.
 # db.create_all()

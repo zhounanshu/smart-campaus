@@ -7,3 +7,5 @@ SQLAlchemy
 MySQL-python
 Flask-Bcrypt
 Flask-Script
+uwsgi
+flask-migrate

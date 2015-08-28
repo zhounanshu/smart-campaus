@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from flask.ext.restful import Resource, reqparse
 from app.models import *
 
@@ -10,7 +9,7 @@ def to_json(model):
     json = {}
     for col in model._sa_class_manager.mapper.mapped_table.columns:
         # json['fields'][col.name] = getattr(model, col.name)
-        json[col.name] = getattr(model, col.name)
+        json[col.name] = str(getattr(model, col.name))
     # return dumps([json])
     return json
 
@@ -61,9 +60,10 @@ class UserList(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('username', type=str)
+        parser.add_argument('password', type=str)
         parser.add_argument('email', type=str)
         args = parser.parse_args(strict=True)
-        new_record = Usr(args['username'], args['email'])
+        new_record = User(args['username'], args['password'], args['email'])
         db.session.add(new_record)
         result = db.session.commit()
         # new_user = User(username, password, email)
@@ -381,7 +381,7 @@ class dList(Resource):
         parser.add_argument('status', type=int)
         args = parser.parse_args(strict=True)
         new_record = SensorData(
-            args['device_id'], args['sensor_id'], args['value'],
+            args['sensor_id'], args['device_id'], args['value'],
             args['datetime'], args['status'])
         db.session.add(new_record)
         db.session.commit()
@@ -536,7 +536,13 @@ class dataList(Resource):
             result = SensorData.query.filter_by(
                 device_id=deviceInfor.id
             ).order_by('datetime desc').limit(10)
-        return to_json_list(result), 201
+            values = to_json_list(result)
+            sensor_list = []
+            for value in values:
+                value["sensor"] = Sensor.query.filter_by(
+                    id=value["sensor_id"]).first().name
+                sensor_list.append(value)
+        return values, 200
 
 
 class locationInfor(Resource):
