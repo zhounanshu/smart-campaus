@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from flask.ext.restful import Resource, reqparse
 from app.models import *
+import datetime
 
 
 def to_json(model):
@@ -481,7 +482,7 @@ class dataSensor(Resource):
         parser.add_argument('build_name', type=unicode)
         parser.add_argument('floor_name', type=str)
         parser.add_argument('room_name', type=str)
-        parser.add_argument('sensor_type', type=str)
+        parser.add_argument('sensor_name', type=str)
         args = parser.parse_args(strict=True)
         buildInfor = Building.query.filter_by(
             name=args['build_name']).first_or_404()
@@ -497,7 +498,7 @@ class dataSensor(Resource):
                     deviceInfor = Device.query.filter_by(
                         room_id=roomInfor.id).first_or_404()
         sensorInfor = Sensor.query.filter_by(
-            type=args['sensor_type']).first_or_404()
+            name=args['sensor_name']).first()
         if sensorInfor and deviceInfor:
             buf = SensorData.query.filter_by(
                 sensor_id=sensorInfor.id,
@@ -533,16 +534,19 @@ class dataList(Resource):
                     deviceInfor = Device.query.filter_by(
                         room_id=roomInfor.id).first_or_404()
         if deviceInfor:
-            result = SensorData.query.filter_by(
+            results = SensorData.query.filter_by(
                 device_id=deviceInfor.id
             ).order_by('datetime desc').limit(10)
-            values = to_json_list(result)
+            values = to_json_list(results)
             sensor_list = []
-            for value in values:
+            for result in results:
+                value = {}
                 value["sensor"] = Sensor.query.filter_by(
-                    id=value["sensor_id"]).first().name
+                    id=result.sensor_id).first().name
+                value["time"] = str(result.datetime)
+                value["value"] = str(result.value)
                 sensor_list.append(value)
-        return values, 200
+        return sensor_list, 200
 
 
 class locationInfor(Resource):
@@ -572,3 +576,70 @@ class locationInfor(Resource):
             return {'status': 'the room not exit'}
 
         return locaList
+
+
+class time_data(Resource):
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('build_name', type=unicode)
+        parser.add_argument('floor_name', type=str)
+        parser.add_argument('room_name', type=str)
+        parser.add_argument("start_time", type=str)
+        parser.add_argument("end_time", type=str)
+        args = parser.parse_args(strict=True)
+        buildInfor = Building.query.filter_by(
+            name=args['build_name']).first_or_404()
+        if buildInfor:
+            floorInfor = Floor.query.filter_by(
+                name=args['floor_name'],
+                building_id=buildInfor.id).first_or_404()
+            if floorInfor:
+                roomInfor = Room.query.filter_by(
+                    name=args['room_name'],
+                    floor_id=floorInfor.id).first_or_404()
+                if roomInfor:
+                    deviceInfor = Device.query.filter_by(
+                        room_id=roomInfor.id).first_or_404()
+        if deviceInfor:
+            results = SensorData.query.filter(
+                SensorData.datetime >= args['start_time'],
+                SensorData.datetime <= args['end_time'],
+                SensorData.device_id == deviceInfor.id
+            ).order_by('datetime desc').all()
+            # values = to_json_list(results)
+            sensor_list = []
+            for result in results:
+                value = {}
+                value["sensor"] = Sensor.query.filter_by(
+                    id=result.sensor_id).first().name
+                value["time"] = str(result.datetime)
+                value["value"] = str(result.value)
+                sensor_list.append(value)
+                print sensor_list
+        return sensor_list, 200
+
+class timeSerial(Resource):
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("start_time", type=str)
+        parser.add_argument('end_time', type=str)
+        args = parser.parse_args(strict=True)
+        sensorValues = SensorData.query.filter(
+            SensorData.datetime >= args['start_time'],
+            SensorData.datetime <= args['end_time']
+            ).order_by('datetime desc').all()
+        sensorList = []
+        for value in sensorValues:
+            sensor = {}
+            sensor["roome"] = value.device.room.name
+            sensor["floor"] = value.device.room.floor.name
+            sensor["building"] = value.device.room.floor.building.name
+            sensor["longitude"] =  value.device.room.floor.building.longitude
+            sensor["latitude"] = value.device.room.floor.building.latitude
+            sensor["name"] = value.sensor.name
+            sensor["value"] = value.value
+            sensor['datetime'] = str(value.datetime)
+            sensorList.append(sensor)
+        return sensorList, 200

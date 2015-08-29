@@ -31,5 +31,8 @@ def create_app(cnf):
     api.add_resource(dataList, '/api/v1.0/all/data', '/api/v1.0/all/data/')
     api.add_resource(
         locationInfor, '/api/v1.0/get/location', '/api/v1.0/get/location/')
+    api.add_resource(time_data, '/api/v1.0/env/time', '/api/v1.0/env/time/')
+    api.add_resource(
+        timeSerial, '/api/v1.0/serial/time', '/api/v1.0/serial/time/')
 
     return app
