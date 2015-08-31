@@ -619,6 +619,7 @@ class time_data(Resource):
                 print sensor_list
         return sensor_list, 200
 
+
 class timeSerial(Resource):
 
     def post(self):
@@ -643,3 +644,16 @@ class timeSerial(Resource):
             sensor['datetime'] = str(value.datetime)
             sensorList.append(sensor)
         return sensorList, 200
+
+class sensorLocation(Resource):
+
+    def get(self):
+        records = Device.query.all()
+        locations = []
+        for record in records:
+            location = {}
+            location["room"] = record.room.name
+            location["floor"] = record.room.floor.name
+            location["building"] = record.room.floor.building.name
+            locations.append(location)
+        return locations, 200
