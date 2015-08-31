@@ -85,9 +85,9 @@ class Room(db.Model):
 class Device(db.Model):
     __tablename__ = 'device'
 
-    id = db.Column(db.Integer, primary_key=True, nullable=False)
-    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
-    name = db.Column(db.String(255), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
+    name = db.Column(db.String(255))
     uuid = db.Column(db.String(255), unique=True)
     description = db.Column(db.String(255))
     relationship = db.relationship(

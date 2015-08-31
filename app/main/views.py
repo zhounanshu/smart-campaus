@@ -3,6 +3,7 @@
 from flask.ext.restful import Resource, reqparse
 from app.models import *
 import datetime
+import types
 
 
 def to_json(model):
@@ -10,7 +11,11 @@ def to_json(model):
     json = {}
     for col in model._sa_class_manager.mapper.mapped_table.columns:
         # json['fields'][col.name] = getattr(model, col.name)
-        json[col.name] = str(getattr(model, col.name))
+        value = getattr(model, col.name)
+        if isinstance(value, unicode):
+            json[col.name] = getattr(model, col.name)
+        else:
+            json[col.name] = str(getattr(model, col.name))
     # return dumps([json])
     return json
 
@@ -102,9 +107,12 @@ class BuildingResource(Resource):
         args = parser.parse_args(strict=True)
         record = Building.query.filter_by(id=building_id).first()
         if record:
-            record.name = args['name']
-            db.session.commit()
-            return {'status': 'updated'}, 201
+            try:
+                record.name = args['name']
+                db.session.commit()
+                return {'status': 'updated'}, 201
+            except:
+                return {"status": "insert error!"}
         else:
             return {'status': 'building not exist!'}, 404
 
@@ -466,6 +474,7 @@ class locationResource(Resource):
             return {"status": 'device not exit'}, 404
 
     def delete(self, uuid):
+
         record = Device.query.filter_by(uuid=uuid).first()
         if record:
             db.session.delete(record)
@@ -505,7 +514,7 @@ class dataSensor(Resource):
                 device_id=deviceInfor.id
             ).order_by('datetime desc').limit(10)
             if buf is not None:
-                return to_json_list(buf), 201
+                return to_json_list(buf), 200
             else:
                 return {"status": "no data"}
         else:
@@ -637,13 +646,14 @@ class timeSerial(Resource):
             sensor["roome"] = value.device.room.name
             sensor["floor"] = value.device.room.floor.name
             sensor["building"] = value.device.room.floor.building.name
-            sensor["longitude"] =  value.device.room.floor.building.longitude
+            sensor["longitude"] = value.device.room.floor.building.longitude
             sensor["latitude"] = value.device.room.floor.building.latitude
             sensor["name"] = value.sensor.name
             sensor["value"] = value.value
             sensor['datetime'] = str(value.datetime)
             sensorList.append(sensor)
         return sensorList, 200
+
 
 class sensorLocation(Resource):
 
@@ -652,8 +662,8 @@ class sensorLocation(Resource):
         locations = []
         for record in records:
             location = {}
-            location["room"] = record.room.name
-            location["floor"] = record.room.floor.name
-            location["building"] = record.room.floor.building.name
+            location["room_name"] = record.room.name
+            location["floor_name"] = record.room.floor.name
+            location["building_name"] = record.room.floor.building.name
             locations.append(location)
         return locations, 200
