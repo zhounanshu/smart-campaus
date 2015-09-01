@@ -509,12 +509,20 @@ class dataSensor(Resource):
         sensorInfor = Sensor.query.filter_by(
             name=args['sensor_name']).first()
         if sensorInfor and deviceInfor:
-            buf = SensorData.query.filter_by(
+            bufs = SensorData.query.filter_by(
                 sensor_id=sensorInfor.id,
                 device_id=deviceInfor.id
             ).order_by('datetime desc').limit(10)
-            if buf is not None:
-                return to_json_list(buf), 200
+            if bufs is not None:
+                # return to_json_list(buf), 200
+                results = []
+                for buf in bufs:
+                    result = {}
+                    result["sensor_name"] = buf.sensor.name
+                    result["value"] = buf.value
+                    result["datetime"] = str(buf.datetime)
+                    results.append(result)
+                return results, 200
             else:
                 return {"status": "no data"}
         else:
