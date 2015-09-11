@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from flask import request
 from flask.ext.restful import Resource, reqparse
 from app.models import *
-import datetime
-import types
 
 
 def to_json(model):
@@ -647,11 +646,11 @@ class timeSerial(Resource):
         sensorValues = SensorData.query.filter(
             SensorData.datetime >= args['start_time'],
             SensorData.datetime <= args['end_time']
-            ).order_by('datetime desc').all()
+        ).order_by('datetime desc').all()
         sensorList = []
         for value in sensorValues:
             sensor = {}
-            sensor["roome"] = value.device.room.name
+            sensor["room"] = value.device.room.name
             sensor["floor"] = value.device.room.floor.name
             sensor["building"] = value.device.room.floor.building.name
             sensor["longitude"] = value.device.room.floor.building.longitude
@@ -675,3 +674,31 @@ class sensorLocation(Resource):
             location["building_name"] = record.room.floor.building.name
             locations.append(location)
         return locations, 200
+
+
+class deviceData(Resource):
+
+    def get(self):
+        try:
+            uuid = request.args.get('uuid')
+            start_time = request.args.get('start_time')
+            end_time = request.args.get('end_time')
+            device_id = Device.query.filter_by(uuid=uuid).first().id
+            sensorValues = SensorData.query.filter(
+                SensorData.datetime >= start_time,
+                SensorData.datetime <= end_time,
+                SensorData.device_id == device_id
+            ).order_by('datetime desc').all()
+            sensorList = []
+            for value in sensorValues:
+                sensor = {}
+                sensor["room"] = value.device.room.name
+                sensor["floor"] = value.device.room.floor.name
+                sensor["building"] = value.device.room.floor.building.name
+                sensor["name"] = value.sensor.name
+                sensor["value"] = value.value
+                sensor['datetime'] = str(value.datetime)
+                sensorList.append(sensor)
+            return sensorList, 200
+        except:
+            return {"error": "the url is invalid!"}

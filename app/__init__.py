@@ -36,5 +36,6 @@ def create_app(cnf):
         timeSerial, '/api/v1.0/serial/time', '/api/v1.0/serial/time/')
     api.add_resource(
         sensorLocation, '/api/v1.0/device/location', '/api/v1.0/device/location/')
+    api.add_resource(deviceData, '/api/v1.0/view/')
 
     return app
