@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from werkzeug.security import generate_password_hash
-from werkzeug.security import check_password_hash
+# al
 from flask.ext.sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -11,27 +10,27 @@ class User(db.Model):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
-    username = db.Column(db.String(255), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128))
-    passwd = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False)
+    name = db.Column(db.String(20), unique=True, nullable=False)
+    # password_hash = db.Column(db.String(128))
+    passwd = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(20), unique=True, nullable=False)
 
     def __init__(self, username, password, email):
-        self.username = username
-        self.password = password
+        self.name = username
+        # self.password = password
         self.passwd = password
         self.email = email
 
-    @property
-    def password(self):
-        raise AttributeError('password is not a readable attribute')
+    # @property
+    # def password(self):
+    #     raise AttributeError('password is not a readable attribute')
 
-    @password.setter
-    def password(self, passw):
-        self.password_hash = generate_password_hash(passw)
+    # @password.setter
+    # def password(self, passw):
+    #     self.password_hash = generate_password_hash(passw)
 
-    def verify_password(self, passw):
-        return check_password_hash(self.password_hash, passw)
+    # def verify_password(self, passw):
+    #     return check_password_hash(self.password_hash, passw)
 
 
 class Building(db.Model):

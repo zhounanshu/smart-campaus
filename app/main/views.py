@@ -30,7 +30,6 @@ class UserResource(Resource):
 
     def get(self, user_id):
         record = User.query.filter_by(id=user_id).first()
-        # return jsonify(json_list=record), 200
         return to_json(record), 200
 
     def put(self, user_id):
@@ -39,7 +38,7 @@ class UserResource(Resource):
         args = parser.parse_args(strict=True)
         record = User.query.filter_by(id=user_id).first()
         if record:
-            record.password = args['password']
+            record.passwd = args['password']
             db.session.commit()
             return {'status': 'updated'}, 201
         else:
@@ -85,7 +84,7 @@ class Login(Resource):
         parser.add_argument('username', type=str)
         parser.add_argument('password', type=str)
         args = parser.parse_args()
-        user = User.query.filter_by(username=args['username']).first()
+        user = User.query.filter_by(name=args['username']).first()
         if user.verify_password(args['password']):
             return {'status': 'login successed'}, 200
         else:

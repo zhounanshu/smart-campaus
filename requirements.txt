@@ -9,3 +9,4 @@ Flask-Bcrypt
 Flask-Script
 uwsgi
 flask-migrate
+

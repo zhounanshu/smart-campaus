@@ -95,7 +95,7 @@ def sensorName():
 #     build['longitude'] = loaction()[0]
 #     postData('building', build)
 
-# # insert floor table
+# insert floor table
 # for i in range(20):
 #     floorInfor = {}
 #     floorInfor['name'] = floor()
@@ -120,7 +120,7 @@ def sensorName():
 # # insert sensor table
 # sensorList = [('sht21', 'temperature'),
 #               ('sht21', 'humidity'), ('seeed', 'noise'),
-#               ('GE', 'pm2.5'), ('GE', 'pm10')]
+#               ('GE', 'pm2.5')]
 # for sensor in sensorList:
 #     sensorInfor = {}
 #     sensorInfor['type'] = sensor[1]
@@ -138,13 +138,13 @@ for line in f_sensor:
 f_sensor.close()
 
 f_deviceId = open('deviceId.txt', 'r')
+f_deviceId.close()
 deviceIdindex = 0
 while True:
-    deviceIdindex += 1
-    line = f_deviceId.readline()
-    if not line:
+    if deviceIdindex >= 20:
         break
-    for i in range(1, 6):
+    deviceIdindex += 1
+    for i in range(1, 5):
         data = {}
         data['device_id'] = deviceIdindex
         data['value'] = random.randint(0, 100) + \
@@ -155,4 +155,3 @@ while True:
         data['status'] = '1'
         print data
         postData('data', data)
-
