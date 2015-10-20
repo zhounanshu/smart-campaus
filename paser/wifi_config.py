@@ -187,11 +187,13 @@ class Frame(object):
         self.arg = arg
         self.start = ['3C', '3C', '3C']
         self.end = ['3E', '3E', '3E']
-        crc = checkCRC(self.frame_type + self.arg)
-        temp = self.start + self.frame_type + self.arg + crc + self.end
+        self.temp = ''
+        self.crc = checkCRC(self.frame_type + self.arg)
+        temp = self.start + self.frame_type + self.arg + self.crc + self.end
         frame = ''
         for value in temp:
             frame += value
+        self.temp = frame
         self.frame = frame.decode('hex')
 
     def get_frame(self):
