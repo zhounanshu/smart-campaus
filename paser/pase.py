@@ -71,12 +71,12 @@ while True:
                         get_data(frame_content, wdsdhwwd_frame, 2))
                     device_id = toInt(
                         get_data(frame_content, wdsdhwwd_frame, 3))
-                    voltage = toFloat(
+                    voltage = toInt(
                         get_data(frame_content, wdsdhwwd_frame, 5))
-                    ele_quantity = toFloat(
+                    ele_quantity = toInt(
                         get_data(frame_content, wdsdhwwd_frame, 6))
-                    device_temp = toFloat(
-                        get_data(frame_content, wdsdhwwd_frame, 7))
+                    device_temp = str(toInt(
+                        get_data(frame_content, wdsdhwwd_frame, 7)) * 0.01)
                     temperature = toFloat(
                         get_data(frame_content, wdsdhwwd_frame, 13))
                     humidity = toFloat(
