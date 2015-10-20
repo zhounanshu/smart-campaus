@@ -696,7 +696,10 @@ class deviceData(Resource):
                 sensor["building"] = value.device.room.floor.building.name
                 sensor["name"] = value.sensor.name
                 sensor["value"] = value.value
-                sensor['datetime'] = str(value.datetime)
+                sensor['datetime'] = value.datetime
+                sensor['ele_quantity'] = value.ele_quantity
+                sensor['device_temp'] = value.device_temp
+                sensor['voltage'] = value.voltage
                 sensorList.append(sensor)
             return sensorList, 200
         except:

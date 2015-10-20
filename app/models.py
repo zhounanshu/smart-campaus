@@ -123,16 +123,22 @@ class SensorData(db.Model):
         db.Integer, db.ForeignKey('sensor.id'), nullable=False)
     device_id = db.Column(
         db.Integer, db.ForeignKey('device.id'), nullable=False)
-    value = db.Column(db.Float)
-    datetime = db.Column(db.DateTime)
-    status = db.Column(db.Integer)
+    value = db.Column(db.String(255))
+    datetime = db.Column(db.String(255))
+    ele_quantity = db.Column(db.String(255))
+    voltage = db.Column(db.String(255))
+    device_temp = db.Column(db.String(255))
 
-    def __init__(self, sensor_id, device_id, value, datetime, status):
+    def __init__(self, sensor_id, device_id,
+                 value, datetime, ele_quantity,
+                 voltage, device_temp):
         self.sensor_id = sensor_id
         self.device_id = device_id
         self.value = value
         self.datetime = datetime
-        self.status = status
+        self.ele_quantity = ele_quantity
+        self.voltage = voltage
+        self.device_temp = device_temp
 
 # Create the database tables.
 # db.create_all()
