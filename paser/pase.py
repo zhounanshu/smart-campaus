@@ -94,7 +94,7 @@ while True:
                         show['device_id'] = device_id
                         show['voltage'] = voltage
                         show['ele_quantity'] = ele_quantity
-                        shoe['device_temp'] = device_temp
+                        show['device_temp'] = device_temp
                         box.append(show)
     else:
         if count > 30:
