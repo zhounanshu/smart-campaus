@@ -56,14 +56,15 @@ def toIp(values):
 
 def toTime(value):
     temp = base_time + datetime.timedelta(seconds=toInt(value))
-    return temp
+    return temp.strftime('%y-%m-%d %H:%M%S')
 
 
 def toFloat(values):
     temp = ''
+    if len(values) < 4:
+        values = ['00' for i in range(4 - len(values))] + values
     for value in values:
         temp += value
-    print temp
     return str(struct.unpack('f', temp.decode('hex'))[0])
 
 
@@ -171,7 +172,7 @@ def set_wifi(ssid, passwd, flag):
 
 
 # config answer frame
-def configFiald(frame):
+def configFaild(frame):
     flag = True
     device_id = toInt(frame[2: 6])
     if toInt(frame[6]) == 0:
