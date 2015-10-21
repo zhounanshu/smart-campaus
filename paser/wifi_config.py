@@ -100,8 +100,9 @@ def int_to_hex(para, length):
     result = []
     temp = []
     data = str(format(para, 'x'))
-    if (len(data)) < 4:
-        for i in range(4 - len(data)):
+    print data
+    if (len(data)) < 2 * length:
+        for i in range(2 * length - len(data)):
             data = '0' + data
     for i in range(len(data) / 2):
         result.append(data[2 * i: 2 * i + 2])
