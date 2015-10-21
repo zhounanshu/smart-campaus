@@ -78,28 +78,33 @@ def checkCRC(message):
             u16CrcData = u16CrcData >> 1
             if u8MSBInfo != 0:
                 u16CrcData = u16CrcData ^ 0xA001
-    length = len(str(format(u16CrcData, 'x')))
-    result = []
-    if length == 1:
-        result.append('0' + str(format(u16CrcData, 'x')))
-    else:
-        result = [str(format(u16CrcData, 'x'))[2 * i: 2 * i + 2]
-                  for i in range(length / 2)]
-    if len(result) < 2:
-        result = ['00'] + result
-    return result
+    return int_to_hex(u16CrcData, 2)
 
 
+def crc16(x):
+    b = 0xA001
+    a = 0xFFFF
+    for byte in x:
+        a = a ^ int(byte, 16)
+        for i in range(8):
+            last = a % 2
+            a = a >> 1
+            if last == 1:
+                a = a ^ b
+    aa = '0' * (6 - len(hex(a))) + hex(a)[2:]
+    return aa
 # CONFIG_FRAME
+
+
 def int_to_hex(para, length):
     result = []
     temp = []
-    data = format(para, 'x')
-    if len(str(data)) == 1:
-        result.append('0' + str(data))
-    else:
-        for i in range(len(str(data)) / 2):
-            result.append(data[2 * i: 2 * i + 2])
+    data = str(format(para, 'x'))
+    if (len(data)) < 4:
+        for i in range(4 - len(data)):
+            data = '0' + data
+    for i in range(len(data) / 2):
+        result.append(data[2 * i: 2 * i + 2])
     distance = length - len(result)
     if distance != 0:
         temp = ['00' for n in range(distance)]
@@ -199,3 +204,4 @@ class Frame(object):
 
     def get_frame(self):
         return self.frame
+
