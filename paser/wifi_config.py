@@ -204,4 +204,3 @@ class Frame(object):
 
     def get_frame(self):
         return self.frame
-

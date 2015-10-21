@@ -50,6 +50,8 @@ while True:
                         get_data(frame_content, wifi_config_frame, 21))
                     passwd = toString(
                         get_data(frame_content, wifi_config_frame, 23))
+                    device_id = toInt(
+                        get_data(frame_content, wifi_config_frame, 3))
                     print ssid1, passwd, frequency, jiange
                     msg = Frame(config_type, config).frame
                     print Frame(config_type, config).temp
