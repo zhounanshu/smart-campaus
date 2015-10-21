@@ -177,7 +177,7 @@ def set_wifi(ssid, passwd, flag):
 
 
 # config answer frame
-def configFaild(frame):
+def configFailed(frame):
     flag = True
     device_id = toInt(frame[2: 6])
     if toInt(frame[6]) == 0:
