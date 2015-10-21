@@ -85,17 +85,16 @@ while True:
                         get_data(frame_content, wdsdhwwd_frame, 15))
                     pm2_5 = toFloat(
                         get_data(frame_content, wdsdhwwd_frame, 16))
-                    if error_count:
-                        show["time"] = sample_time
-                        show["temperature"] = temperature
-                        show['humidity'] = humidity
-                        show['noise'] = noise
-                        show['pm2_5'] = pm2_5
-                        show['device_id'] = device_id
-                        show['voltage'] = voltage
-                        show['ele_quantity'] = ele_quantity
-                        show['device_temp'] = device_temp
-                        box.append(show)
+                    show["time"] = sample_time
+                    show["temperature"] = temperature
+                    show['humidity'] = humidity
+                    show['noise'] = noise
+                    show['pm2_5'] = pm2_5
+                    show['device_id'] = device_id
+                    show['voltage'] = voltage
+                    show['ele_quantity'] = ele_quantity
+                    show['device_temp'] = device_temp
+                    box.append(show)
     else:
         if count > 30:
             error_count = 0
@@ -103,6 +102,7 @@ while True:
             if error_count != 0:
                 frame_id = frame_id[:error_count]
                 box = box[: error_count]
+            print box
             if len(frame_id) <= 120:
                 frame_id_append = [
                     '00' for i in range(120 - len(frame_id))]
