@@ -56,7 +56,7 @@ def toIp(values):
 
 def toTime(value):
     temp = base_time + datetime.timedelta(seconds=toInt(value))
-    return temp.strftime('%y-%m-%d %H:%M%S')
+    return temp.strftime('%y-%m-%d %H:%M:%S')
 
 
 def toFloat(values):
