@@ -5,7 +5,7 @@ import socket
 from wifi_config import *
 import select
 
-config = set_time() + set_host('121.40.255.112', 8081, 1) + \
+config = set_time() + set_host('127.0.0.1', 8081, 1) + \
     set_wifi('shisu', '', 2)
 config_type = 2
 
