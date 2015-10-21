@@ -34,7 +34,7 @@ while True:
                     print "crc check error!"
                     continue
                 else:
-                    if not configFailed():
+                    if not configFailed(frame_content):
                         print "config successful........"
             elif frame_type == 4:
                 if toInt(checkCRC(frame_content)) != toInt(crc_check):
