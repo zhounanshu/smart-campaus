@@ -7,8 +7,8 @@ host = '127.0.0.1'
 port = 8088
 s_up = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s_down = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s_up.bind(' ', 8081)
-s_down.bind(' ', 8088)
+s_up.bind((' ', 8081))
+s_down.bind((' ', 8088))
 s_up.setblocking(0)
 s_down.setblocking(0)
 while True:
