@@ -3,6 +3,7 @@
 import hexdump
 import socket
 from wifi_config import *
+from dbConnection import *
 import select
 
 config = set_time()
@@ -103,6 +104,7 @@ while True:
                 frame_id = frame_id[:error_count]
                 box = box[: error_count]
             print box
+            post(box)
             box = []
             if len(frame_id) <= 120:
                 frame_id_append = [

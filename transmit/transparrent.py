@@ -1,26 +1,55 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import socket
-import select
+from threading import Thread
 
-host = '127.0.0.1'
-port = 8088
-s_up = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s_down = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s_up.bind((' ', 8081))
-s_down.bind((' ', 8088))
-s_up.setblocking(0)
-s_down.setblocking(0)
-while True:
-    up_ready = select.select([s_up], [], [], 2)
-    if up_ready[0]:
-        up_data, up_addr = s_up.recvfrom(4096)
-        s_up.sendto(up_data, (host, port))
-    else:
-        print "waitting for up data"
-    down_ready = select.select([s_down], [], [], 2)
-    if down_ready[0]:
-        down_data, down_addr = s_down.recvfrom(4096)
-        s_down.sendto(down_data, up_addr)
-    else:
-        print "waitting for down_data"
+
+class Proxy(Thread):
+
+    """ used to proxy single udp connection
+    """
+    BUFFER_SIZE = 4096
+
+    def __init__(self, listening_address, forward_address):
+        print " Server started on", listening_address
+        Thread.__init__(self)
+        self.bind = listening_address
+        self.target = forward_address
+
+    def run(self):
+        # listen for incoming connections:
+        target = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        target.connect(self.target)
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            s.bind(self.bind)
+        except socket.error, err:
+            print "Couldn't bind server on %r" % (self.bind, )
+            raise SystemExit
+        while 1:
+            (datagram, addr) = s.recvfrom(self.BUFFER_SIZE)
+            if not datagram:
+                break
+            length = len(datagram)
+            sent = target.send(datagram)
+            if length != sent:
+                print 'cannot send to %r, %r !+ %r' % (self.s, length, sent)
+            datagram = target.recv(self.BUFFER_SIZE)
+            if not datagram:
+                break
+            length = len(datagram)
+            sent = s.sendto(datagram, addr)
+            if length != sent:
+                print 'cannot send to %r, %r !+ %r' % (self.s, length, sent)
+        s.close()
+
+
+if __name__ == "__main__":
+    LISTEN = ("0.0.0.0", 5093)
+    TARGET = ("10.12.2.26", 5093)
+    while 1:
+        proxy = Proxy(LISTEN, TARGET)
+        proxy.start()
+        proxy.join()
+        print ' [restarting] '
