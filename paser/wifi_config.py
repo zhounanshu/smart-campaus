@@ -164,11 +164,11 @@ def set_host(host, port, flag):
 # set ssid and password
 def set_wifi(ssid, passwd, flag):
     if flag == 1:
-        config_ssid_type = ['01', '01']
-        config_pwd_type = ['01', '03']
+        config_ssid_type = ['00', '11']
+        config_pwd_type = ['00', '13']
     elif flag == 2:
-        config_ssid_type = ['01', '04']
-        config_pwd_type = ['01', '06']
+        config_ssid_type = ['00', '14']
+        config_pwd_type = ['00', '16']
     else:
         print "with ssid: you are setting wrong flag!"
     ssid_config = config_ssid_type + str_to_hex(ssid, 32)
