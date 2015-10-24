@@ -19,7 +19,7 @@ box = []
 error_count = 0
 count = 0
 while True:
-    ready = select.select([s], [], [], 4)
+    ready = select.select([s], [], [], 2)
     if ready[0]:
         data, addr = s.recvfrom(4096)
         result = hexdump.dump(data)
