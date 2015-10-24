@@ -13,7 +13,7 @@ port = 8088
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind(('', port))
 s.setblocking(0)
-print "waitting on port:", port
+# print "waitting on port:", port
 frame_id = []
 box = []
 error_count = 0
