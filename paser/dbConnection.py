@@ -46,7 +46,6 @@ def Post(args):
             values.append(
                 (device_id, PM2_5, pm2_5, datetime,
                  ele_quantity, voltage, device_temp))
-        print values
         cur.executemany(sql, values)
         conn.commit()
         cur.close()
