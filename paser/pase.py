@@ -55,11 +55,8 @@ while True:
                         get_data(frame_content, wifi_config_frame, 21))
                     passwd = toString(
                         get_data(frame_content, wifi_config_frame, 23))
-                    print ssid1, passwd, frequency, device_id
                     msg = Frame(config_type, config).frame
-                    print Frame(config_type, config).temp
                     s.sendto(msg, addr)
-                    print "config device ........"
             elif frame_type == 100:
                 show = {}
                 count += 1
@@ -68,7 +65,6 @@ while True:
                     print "crc check error!"
                     error_count = count
                 else:
-                    print "Received:", result, "from", addr
                     frame_id += frame_content[2: 6]
                     sample_time = toTime(
                         get_data(frame_content, wdsdhwwd_frame, 2))
@@ -105,7 +101,6 @@ while True:
             if error_count != 0:
                 frame_id = frame_id[:error_count]
                 box = box[: error_count]
-            print box
             Post(box)
             box = []
             if len(frame_id) <= 120:
@@ -118,5 +113,4 @@ while True:
             data_answer_frame = answer.frame
             s.sendto(data_answer_frame, addr)
             frame_id = []
-            print "the count is", count
             count = 0
