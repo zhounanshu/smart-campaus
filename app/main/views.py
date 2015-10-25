@@ -381,15 +381,19 @@ class dList(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('device_id', type=int)
-        parser.add_argument('sensor_id', type=int)
-        parser.add_argument('value', type=unicode)
+        parser.add_argument('device_id', type=unicode)
+        parser.add_argument('sensor_id', type=str)
+        parser.add_argument('value', type=str)
+        parser.add_argument("device_temp", type=str)
+        parser.add_argument("voltage", type=str)
+        parser.add_argument('ele_quantity', type=str)
         parser.add_argument('datetime', type=str)
-        parser.add_argument('status', type=int)
         args = parser.parse_args(strict=True)
+        print args
         new_record = SensorData(
             args['sensor_id'], args['device_id'], args['value'],
-            args['datetime'], args['status'])
+            args['datetime'], args['ele_quantity'], args['voltage'],
+            args['device_temp'])
         db.session.add(new_record)
         db.session.commit()
         return new_record.id, 201
@@ -703,3 +707,4 @@ class deviceData(Resource):
             return sensorList, 200
         except:
             return {"error": "the url is invalid!"}
+
