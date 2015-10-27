@@ -5,8 +5,7 @@ import socket
 from wifi_config import *
 import select
 
-config = set_time() + set_host('127.0.0.1', 8081, 1) + \
-    set_wifi('shisu', '', 2)
+config = set_time()
 config_type = 2
 
 port = 8081
@@ -52,11 +51,14 @@ while True:
                         get_data(frame_content, wifi_config_frame, 23))
                     device_id = toInt(
                         get_data(frame_content, wifi_config_frame, 3))
-                    print ssid1, passwd, frequency, jiange
+                    print ssid1, passwd, frequency, device_id
+                    if device_id == 1162:
+                        print "config device ........"
+                        config += set_host('127.0.0.1',
+                                           8081, 2) + set_wifi('shisu', '', 1)
                     msg = Frame(config_type, config).frame
-                    print Frame(config_type, config).temp
+                    # print Frame(config_type, config).temp
                     s.sendto(msg, addr)
-                    print "config device ........"
             elif frame_type == 100:
                 print 'receview sensor data......'
     else:
