@@ -685,11 +685,14 @@ class deviceData(Resource):
             uuid = request.args.get('uuid')
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
+            count = request.args.get('count')
+            if count is None:
+                count = 4
             sensorValues = SensorData.query.filter(
                 SensorData.datetime >= start_time,
                 SensorData.datetime <= end_time,
                 SensorData.device_id == uuid
-            ).order_by('datetime desc').all()
+            ).order_by('datetime desc').limit(count)
             sensorList = []
             for value in sensorValues:
                 sensor = {}
