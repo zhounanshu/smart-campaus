@@ -20,6 +20,7 @@ class confLoader(object):
             self.user = configInfor['user']
             self.passwd = configInfor['passwd']
             self.db = configInfor['db']
+            self.url = configInfor['url']
         else:
             logging.debug("load config failed......")
 
@@ -37,3 +38,6 @@ class confLoader(object):
 
     def get_db(self):
         return self.db
+
+    def get_url(self):
+        return self.url

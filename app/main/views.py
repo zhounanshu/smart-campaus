@@ -389,7 +389,6 @@ class dList(Resource):
         parser.add_argument('ele_quantity', type=str)
         parser.add_argument('datetime', type=str)
         args = parser.parse_args(strict=True)
-        print args
         new_record = SensorData(
             args['sensor_id'], args['device_id'], args['value'],
             args['datetime'], args['ele_quantity'], args['voltage'],

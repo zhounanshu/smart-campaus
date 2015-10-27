@@ -101,7 +101,12 @@ while True:
             if error_count != 0:
                 frame_id = frame_id[:error_count]
                 box = box[: error_count]
-            Post(box)
+            # Post(box)
+            for arg in box:
+                postData(arg, 1)
+                postData(arg, 2)
+                postData(arg, 3)
+                postData(arg, 4)
             box = []
             if len(frame_id) <= 120:
                 frame_id_append = [
