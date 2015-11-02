@@ -692,7 +692,7 @@ class deviceData(Resource):
             end_time = request.args.get('end_time')
             limit = request.args.get('limit', 4)
             if uuid is None:
-                return {"错误": "错误的访问方法!"}, 400
+                return {"警告": "错误的访问方法!"}, 400
             if (start_time is not None) and (end_time is not None):
                 sensorValues = SensorData.query.filter(
                     SensorData.datetime >= start_time,
@@ -718,4 +718,4 @@ class deviceData(Resource):
                 sensorList.append(sensor)
             return sensorList, 200
         except:
-            return {"错误": "错误的访问方法!"}, 400
+            return {"警告": "错误的访问方法!"}, 400
