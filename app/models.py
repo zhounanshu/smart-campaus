@@ -122,7 +122,7 @@ class SensorData(db.Model):
     sensor_id = db.Column(
         db.Integer, db.ForeignKey('sensor.id'), nullable=False)
     device_id = db.Column(
-        db.Integer, db.ForeignKey('device.uuid'), nullable=False)
+        db.String(255), db.ForeignKey('device.uuid'), nullable=False)
     value = db.Column(db.String(255))
     datetime = db.Column(db.String(255))
     ele_quantity = db.Column(db.String(255))

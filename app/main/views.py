@@ -667,16 +667,20 @@ class timeSerial(Resource):
 class sensorLocation(Resource):
 
     def get(self):
-        records = Device.query.all()
-        locations = []
-        for record in records:
-            location = {}
-            location['uuid'] = record.uuid
-            location["room_name"] = record.room.name
-            location["floor_name"] = record.room.floor.name
-            location["building_name"] = record.room.floor.building.name
-            locations.append(location)
-        return locations, 200
+        try:
+            records = Device.query.all()
+            locations = []
+            for record in records:
+                location = {}
+                location['uuid'] = record.uuid
+                location["room_name"] = record.room.name
+                location["floor_name"] = record.room.floor.name
+                location["building_name"] = record.room.floor.building.name
+                location['campus'] = record.room.floor.building.description
+                locations.append(location)
+            return locations, 200
+        except:
+            return {"警告": "错误的访问方法!"}, 400
 
 
 class deviceData(Resource):
@@ -686,19 +690,19 @@ class deviceData(Resource):
             uuid = request.args.get('uuid')
             start_time = request.args.get('start_time')
             end_time = request.args.get('end_time')
-            limit = request.args.get('limit')
-            if limit is None:
-                limit = 4
-            if start_time & end_time:
+            limit = request.args.get('limit', 4)
+            if uuid is None:
+                return {"错误": "错误的访问方法!"}, 400
+            if (start_time is not None) and (end_time is not None):
                 sensorValues = SensorData.query.filter(
                     SensorData.datetime >= start_time,
                     SensorData.datetime <= end_time,
                     SensorData.device_id == uuid
-                ).order_by('datetime desc').limit(limt)
+                ).order_by('datetime desc').limit(limit)
             else:
                 sensorValues = SensorData.query.filter(
                     SensorData.device_id == uuid
-                ).order_by('datetime desc').limit(limt)
+                ).order_by('datetime desc').limit(limit)
             sensorList = []
             for value in sensorValues:
                 sensor = {}
@@ -714,4 +718,4 @@ class deviceData(Resource):
                 sensorList.append(sensor)
             return sensorList, 200
         except:
-            return {"error": "the url is invalid!"}, 404
+            return {"错误": "错误的访问方法!"}, 400
