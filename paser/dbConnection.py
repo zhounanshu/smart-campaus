@@ -78,7 +78,10 @@ def postData(arg, sensorType):
     if sensorType == NOISE:
         temp['value'] = arg['noise']
         temp['sensor_id'] = NOISE
-    req = urllib2.Request(url, json.dumps(temp))
-    req.add_header('Content-Type', 'application/json')
-    response = urllib2.urlopen(req)
-    return True
+    try:
+        req = urllib2.Request(url, json.dumps(temp))
+        req.add_header('Content-Type', 'application/json')
+        response = urllib2.urlopen(req)
+        return True
+    except:
+        return False
