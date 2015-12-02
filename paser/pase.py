@@ -108,6 +108,7 @@ while True:
                     postData(arg, 2)
                     postData(arg, 3)
                     postData(arg, 4)
+                    box = []
                 if len(frame_id) <= 120:
                     frame_id_append = [
                         '00' for i in range(120 - len(frame_id))]
@@ -119,6 +120,5 @@ while True:
                 s.sendto(data_answer_frame, addr)
             except:
                 pass
-            box = []
             frame_id = []
             count = 0
