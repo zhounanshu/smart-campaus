@@ -76,7 +76,7 @@ def checkCRC(message):
         result = [str(format(u16CrcData, 'x'))[2 * i: 2 * i + 2]
                   for i in range(length / 2)]
     if len(result) < 2:
-        result = ['00'] + result  
+        result = ['00'] + result
     return result
 
 wifi_config_frame = [2, 4, 4, 4, 2, 1, 1, 1, 4, 4, 4, 4, 4, 2, 2, 4, 2, 40, 4,
@@ -89,40 +89,6 @@ wifi_data_answer_frame = [2, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
 
 wifi_config = ['00', '04', '00', '00', '21', '99', '1D', 'B3', '95', '8B', '00', '00', '04', '76', '00', '01', '01', '01', '01', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '05', '00', '01', 'C0', 'A8', '01', '78', '1F', '91', '31', '2E', '31', '2E', '31', '2E', '31', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', 'C0', 'A8', '00', '0A', '1F', '93', '32', '2E', '32', '2E', '32', '2E', '32', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '4C', '61', '62', '33', '30', '35', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00',
                '00', '00', '00', '00', '00', '00', '00', '0C', '6E', '65', '74', '63', '65', '6E', '74', '65', '72', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '6C', '6D', '73', '6B', '6A', '63', '78', '74', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '0D', '35', '38', '36', '30', '37', '37', '38', '30', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '03', '00', '00', '00', '01', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A', '0A']
-
-# crc = ['BC', 'B1']
-# device_time = get_data(wifi_config, wifi_config_frame, 2)
-# device_id = get_data(wifi_config, wifi_config_frame, 3)
-device_ip = get_data(wifi_config, wifi_config_frame, 8)
-# fre = get_data(wifi_config, wifi_config_frame, 13)
-# send_fre = get_data(wifi_config, wifi_config_frame, 14)
-host_ip = get_data(wifi_config, wifi_config_frame, 15)
-# ssid = get_data(wifi_config, wifi_config_frame, 21)
-# passwd = get_data(wifi_config, wifi_config_frame, 23)
-# check CRC
-# print checkCRC(wifi_config)
-# print toInt(crc)
-# device time
-# d = base_time + datetime.timedelta(seconds=toInt(device_time))
-# print d
-
-# t = ['1D' 'B2' '13' 'DB']
-# print (base_time + datetime.timedelta(seconds=toInt(t)))
-# device id
-# print device_id
-# print toInt(device_id)
-# device ssid and password
-# print ssid + passwd
-# print toString(ssid), toString(passwd)
-
-# frequency min
-# print toInt(fre), toInt(send_fre)
-
-# print host_ip
-# print host_ip
-print toIp(host_ip), toIp(device_ip)
-
-# CONFIG_FRAME
 
 
 def int_to_hex(para, length):
@@ -242,6 +208,3 @@ class Frame(object):
 
     def get_frame(self):
         return self.frame
-
-# config = ['00','01','00','00','04','6C','00','02','1D','B2','13','DB']
-# print Frame(2, config, ('192.168.1.104', 5000)).send_frame()
