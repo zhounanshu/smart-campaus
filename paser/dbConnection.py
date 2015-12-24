@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import MySQLdb
 import urllib2
-import urllib
 import json
 from confLoad import confLoader
 from confLoad import *
