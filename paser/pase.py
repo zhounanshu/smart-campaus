@@ -26,7 +26,7 @@ pid = os.fork()
 if pid > 0:
     sys.exit(0)
 # 修改子进程工作目录
-os.child('/')
+os.chdir('/')
 # 创建新的会话，子进程成为会话的首进程
 os.setsid()
 # 修改工作目录的umask
