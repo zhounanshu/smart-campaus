@@ -20,4 +20,4 @@ while True:
     if result[:8] == "3C 3C 3C":
         msg = Frame(config_type, config).frame
         s.sendto(msg, addr)
-	print "config device ........"
+        print "config device ........"
