@@ -11,7 +11,7 @@ import sys
 config = set_time()
 config_type = 2
 
-port = 8081
+port = 1881
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.bind(('', port))
 s.setblocking(0)
