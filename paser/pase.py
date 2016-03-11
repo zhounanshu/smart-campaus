@@ -128,14 +128,6 @@ while True:
             if error_count != 0:
                 frame_id = frame_id[:error_count]
                 box = box[: error_count]
-            Post(box)
-            # try:
-            #     for arg in box:
-            #         postData(arg, 1)
-            #         postData(arg, 2)
-            #         postData(arg, 3)
-            #         postData(arg, 4)
-            box = []
             if len(frame_id) <= 120:
                 frame_id_append = [
                     '00' for i in range(120 - len(frame_id))]
@@ -145,7 +137,7 @@ while True:
                 answer = Frame(1, frame_id[: 120])
             data_answer_frame = answer.frame
             s.sendto(data_answer_frame, addr)
-            # except:
-            #     pass
+            Post(box)
+            box = []
             frame_id = []
             count = 0
